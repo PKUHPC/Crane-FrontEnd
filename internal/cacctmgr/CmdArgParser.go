@@ -20,7 +20,7 @@ var (
 
 	rootCmd = &cobra.Command{
 		Use:   "cacctmgr",
-		Short: "Manage account in crane",
+		Short: "Manage accounts, users, and qos tables",
 		Long:  "",
 		PersistentPreRun: func(cmd *cobra.Command, args []string) { //The Persistent*Run functions will be inherited by children if they do not declare their own
 			Init()
@@ -29,12 +29,12 @@ var (
 	/* ---------------------------------------------------- add  ---------------------------------------------------- */
 	addCmd = &cobra.Command{
 		Use:   "add",
-		Short: "Perform the add operation",
+		Short: "Add entity",
 		Long:  "",
 	}
 	addAccountCmd = &cobra.Command{
 		Use:   "account",
-		Short: "Add a new account to crane",
+		Short: "Add a new account",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
 			AddAccount(&account)
@@ -42,7 +42,7 @@ var (
 	}
 	addUserCmd = &cobra.Command{
 		Use:   "user",
-		Short: "Add a new user to crane",
+		Short: "Add a new user",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
 			AddUser(&user, partition, level)
@@ -50,7 +50,7 @@ var (
 	}
 	addQosCmd = &cobra.Command{
 		Use:   "qos",
-		Short: "Add a new qos to crane",
+		Short: "Add a new qos",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
 			AddQos(&qos)
@@ -60,12 +60,12 @@ var (
 	removeCmd = &cobra.Command{
 		Use:     "remove",
 		Aliases: []string{"delete"},
-		Short:   "Perform the remove operation",
+		Short:   "Delete entity",
 		Long:    "",
 	}
 	removeAccountCmd = &cobra.Command{
 		Use:   "account",
-		Short: "Delete existing account",
+		Short: "Delete an existing account",
 		Long:  "",
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
@@ -74,7 +74,7 @@ var (
 	}
 	removeUserCmd = &cobra.Command{
 		Use:   "user",
-		Short: "Delete existing user",
+		Short: "Delete an existing user",
 		Long:  "",
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
@@ -83,7 +83,7 @@ var (
 	}
 	removeQosCmd = &cobra.Command{
 		Use:   "qos",
-		Short: "Delete existing Qos",
+		Short: "Delete an existing Qos",
 		Long:  "",
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
@@ -93,7 +93,7 @@ var (
 	/* --------------------------------------------------- modify  -------------------------------------------------- */
 	modifyCmd = &cobra.Command{
 		Use:   "modify",
-		Short: "Perform the modify operation",
+		Short: "Modify entity",
 		Long:  "",
 	}
 	modifyAccountCmd = &cobra.Command{
@@ -136,7 +136,7 @@ var (
 	showCmd = &cobra.Command{
 		Use:     "show",
 		Aliases: []string{"list"},
-		Short:   "Perform the show operation",
+		Short:   "Display all records of an entity",
 		Long:    "",
 	}
 	showAccountCmd = &cobra.Command{
@@ -169,12 +169,12 @@ var (
 	findCmd = &cobra.Command{
 		Use:     "find",
 		Aliases: []string{"search"},
-		Short:   "Perform the search operation",
+		Short:   "Find a specific entity",
 		Long:    "",
 	}
 	findAccountCmd = &cobra.Command{
 		Use:   "account",
-		Short: "Find and display a specific account information",
+		Short: "Find and display information of a specific account",
 		Long:  "",
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
@@ -183,7 +183,7 @@ var (
 	}
 	findUserCmd = &cobra.Command{
 		Use:   "user",
-		Short: "Find and display a specific user information",
+		Short: "Find and display information of a specific user",
 		Long:  "",
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
@@ -192,7 +192,7 @@ var (
 	}
 	findQosCmd = &cobra.Command{
 		Use:   "qos",
-		Short: "Find and display a specific qos information",
+		Short: "Find and display information of a specific qos",
 		Long:  "",
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
@@ -218,8 +218,8 @@ func init() {
 	addAccountCmd.Flags().StringVarP(&account.Description, "description", "D", "", "some information to describe account")
 	addAccountCmd.Flags().StringVarP(&account.ParentAccount, "parent", "P", "", "parent account")
 	addAccountCmd.Flags().StringSliceVar(&account.AllowedPartitions, "partition", nil, "the partition list which this account has access to")
-	addAccountCmd.Flags().StringVarP(&account.DefaultQos, "default_qos", "Q", "", "Default qos of the account")
-	addAccountCmd.Flags().StringSliceVar(&account.AllowedQosList, "qos_list", nil, "Allowed qos list of the account")
+	addAccountCmd.Flags().StringVarP(&account.DefaultQos, "default_qos", "Q", "", "default qos of the account")
+	addAccountCmd.Flags().StringSliceVar(&account.AllowedQosList, "qos_list", nil, "allowed qos list of the account")
 	err := addAccountCmd.MarkFlagRequired("name")
 	if err != nil {
 		return
@@ -258,10 +258,10 @@ func init() {
 	rootCmd.AddCommand(modifyCmd)
 
 	modifyCmd.AddCommand(modifyAccountCmd)
-	modifyAccountCmd.Flags().StringVarP(&modifyItem, "set", "S", "", "Modify as an overlay")
-	modifyAccountCmd.Flags().StringVarP(&modifyItem, "add", "A", "", "Modify as an addition")
-	modifyAccountCmd.Flags().StringVarP(&modifyItem, "delete", "D", "", "Modify as an deletion")
-	modifyAccountCmd.Flags().StringVarP(&name, "name", "N", "", "Name of the account being modified")
+	modifyAccountCmd.Flags().StringVarP(&modifyItem, "set", "S", "", "modify by overwriting")
+	modifyAccountCmd.Flags().StringVarP(&modifyItem, "add", "A", "", "modify by adding")
+	modifyAccountCmd.Flags().StringVarP(&modifyItem, "delete", "D", "", "modify by deleting")
+	modifyAccountCmd.Flags().StringVarP(&name, "name", "N", "", "name of the account being modified")
 	modifyAccountCmd.MarkFlagsMutuallyExclusive("set", "add", "delete")
 	err = modifyAccountCmd.MarkFlagRequired("name")
 	if err != nil {
@@ -269,10 +269,10 @@ func init() {
 	}
 
 	modifyCmd.AddCommand(modifyUserCmd)
-	modifyUserCmd.Flags().StringVarP(&modifyItem, "set", "S", "", "Modify as an overlay")
-	modifyUserCmd.Flags().StringVarP(&modifyItem, "add", "A", "", "Modify as an addition")
-	modifyUserCmd.Flags().StringVarP(&modifyItem, "delete", "D", "", "Modify as an deletion")
-	modifyUserCmd.Flags().StringVarP(&name, "name", "N", "", "Name of the user being modified")
+	modifyUserCmd.Flags().StringVarP(&modifyItem, "set", "S", "", "modify by overwriting")
+	modifyUserCmd.Flags().StringVarP(&modifyItem, "add", "A", "", "modify by adding")
+	modifyUserCmd.Flags().StringVarP(&modifyItem, "delete", "D", "", "modify by deleting")
+	modifyUserCmd.Flags().StringVarP(&name, "name", "N", "", "name of the user being modified")
 	modifyUserCmd.Flags().StringVarP(&partitionFilter, "partition", "P", "", "partition which being modified")
 	modifyUserCmd.MarkFlagsMutuallyExclusive("set", "add", "delete")
 	err = modifyUserCmd.MarkFlagRequired("name")
@@ -281,12 +281,12 @@ func init() {
 	}
 
 	modifyCmd.AddCommand(modifyQosCmd)
-	modifyQosCmd.Flags().StringVarP(&name, "name", "N", "", "Name of the qos being modified")
+	modifyQosCmd.Flags().StringVarP(&name, "name", "N", "", "name of the qos being modified")
 	err = modifyQosCmd.MarkFlagRequired("name")
 	if err != nil {
 		return
 	}
-	modifyQosCmd.Flags().StringVarP(&modifyItem, "set", "S", "", "Modify as an overlay")
+	modifyQosCmd.Flags().StringVarP(&modifyItem, "set", "S", "", "modify by overwriting")
 	err = modifyQosCmd.MarkFlagRequired("set")
 	if err != nil {
 		return
