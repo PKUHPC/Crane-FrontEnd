@@ -1,6 +1,7 @@
 package ccancel
 
 import (
+	"CraneFrontEnd/internal/util"
 	"github.com/spf13/cobra"
 	"os"
 	"strconv"
@@ -29,4 +30,5 @@ func ParseCmdArgs() {
 	}
 }
 func init() {
+	rootCmd.PersistentFlags().StringVarP(&util.ConfigFilePath, "config", "C", "/etc/crane/config.yaml", "Path to configuration file")
 }

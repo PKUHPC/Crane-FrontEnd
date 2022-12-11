@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"os"
-	OSuser "os/user"
+	OSUser "os/user"
 	"regexp"
 	"strconv"
 )
@@ -252,7 +252,7 @@ func AddAccount(account *protos.AccountInfo) {
 }
 
 func AddUser(user *protos.UserInfo, partition []string, level string) {
-	lu, err := OSuser.Lookup(user.Name)
+	lu, err := OSUser.Lookup(user.Name)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -602,7 +602,7 @@ func Init() {
 
 	stub = protos.NewCraneCtldClient(conn)
 
-	currentUser, err := OSuser.Current()
+	currentUser, err := OSUser.Current()
 	if err != nil {
 		log.Fatal(err.Error())
 	}
