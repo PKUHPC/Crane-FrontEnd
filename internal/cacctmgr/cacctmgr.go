@@ -27,6 +27,9 @@ func QueryLevelAndAccount(name string, stub protos.CraneCtldClient) (bool, proto
 
 	reply, err := stub.QueryEntityInfo(context.Background(), req)
 	if err != nil {
+		if !initSuccess {
+			return false, protos.UserInfo_Admin, ""
+		}
 		panic("query entity info failed: " + err.Error())
 	}
 
@@ -607,7 +610,7 @@ func Init() {
 		log.Fatal(err.Error())
 	}
 
-	_, curLevel, curAccount = QueryLevelAndAccount(currentUser.Name, stub)
+	initSuccess, curLevel, curAccount = QueryLevelAndAccount(currentUser.Name, stub)
 	//if find {
 	//if curLevel == protos.UserInfo_None {
 	//	fmt.Println("none")

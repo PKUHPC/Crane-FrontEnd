@@ -7,6 +7,8 @@ import (
 )
 
 var (
+	initSuccess bool
+
 	name      string
 	partition []string
 	level     string
@@ -217,9 +219,9 @@ func init() {
 	addAccountCmd.Flags().StringVarP(&account.Name, "name", "N", "", "the name to identify account")
 	addAccountCmd.Flags().StringVarP(&account.Description, "description", "D", "", "some information to describe account")
 	addAccountCmd.Flags().StringVarP(&account.ParentAccount, "parent", "P", "", "parent account")
-	addAccountCmd.Flags().StringSliceVar(&account.AllowedPartitions, "partition", nil, "the partition list which this account has access to")
+	addAccountCmd.Flags().StringSliceVarP(&account.AllowedPartitions, "partition", "p", nil, "the partition list which this account has access to")
 	addAccountCmd.Flags().StringVarP(&account.DefaultQos, "default_qos", "Q", "", "default qos of the account")
-	addAccountCmd.Flags().StringSliceVar(&account.AllowedQosList, "qos_list", nil, "allowed qos list of the account")
+	addAccountCmd.Flags().StringSliceVarP(&account.AllowedQosList, "qos_list", "q", nil, "allowed qos list of the account")
 	err := addAccountCmd.MarkFlagRequired("name")
 	if err != nil {
 		return
@@ -228,7 +230,7 @@ func init() {
 	addCmd.AddCommand(addUserCmd)
 	addUserCmd.Flags().StringVarP(&user.Name, "name", "N", "", "the name to identify user")
 	addUserCmd.Flags().StringVarP(&user.Account, "account", "A", "", "parent account")
-	addUserCmd.Flags().StringSliceVar(&partition, "partition", nil, "the partition list which this account has access to")
+	addUserCmd.Flags().StringSliceVarP(&partition, "partition", "p", nil, "the partition list which this account has access to")
 	addUserCmd.Flags().StringVarP(&level, "level", "L", "none", "user power level")
 	err = addUserCmd.MarkFlagRequired("name")
 	if err != nil {
@@ -243,7 +245,7 @@ func init() {
 	addQosCmd.Flags().StringVarP(&qos.Name, "name", "N", "", "the name to identify qos")
 	addQosCmd.Flags().StringVarP(&qos.Description, "description", "D", "", "some information to describe qos")
 	addQosCmd.Flags().Uint32VarP(&qos.Priority, "priority", "P", 1000, "")
-	addQosCmd.Flags().Uint32Var(&qos.MaxJobsPerUser, "max_jobs_per_user", 0, "")
+	addQosCmd.Flags().Uint32VarP(&qos.MaxJobsPerUser, "max_jobs_per_user", "M", 0, "")
 	err = addQosCmd.MarkFlagRequired("name")
 	if err != nil {
 		return
